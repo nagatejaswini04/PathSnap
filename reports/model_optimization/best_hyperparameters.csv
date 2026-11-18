@@ -1,0 +1,2 @@
+best_validation_f1,learning_rate,max_iter,max_leaf_nodes,max_depth,min_samples_leaf,l2_regularization
+0.7323959286684971,0.021719940521626242,150,54,3,29,0.3636047029165772
