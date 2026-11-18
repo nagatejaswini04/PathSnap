@@ -221,3 +221,28 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# =================================
+# PATHSNAP DATASET EXCLUSIONS
+# =================================
+
+# Raw datasets
+data/train/
+data/student_test/
+
+# Generated processed datasets
+data/processed/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+
+# Model artifacts
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# Temporary files
+*.tmp
+*.bak
