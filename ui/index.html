@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PathSnap – Evaluator Console</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Leaflet bundled locally (ui/vendor) so the UI works without CDN access -->
+<link rel="stylesheet" href="vendor/leaflet.css">
+<script src="vendor/leaflet.js"></script>
+<style>
+  :root { --ink:#16202c; --mut:#5b6775; --line:#dfe3e8; --acc:#c2410c; --gps:#1d4ed8; --bg:#f6f7f9; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:var(--ink); background:var(--bg);
+         display:grid; grid-template-columns:340px 1fr; height:100vh; }
+  aside { border-right:1px solid var(--line); background:#fff; padding:18px; overflow:auto; }
+  h1 { font-size:20px; margin:0 0 2px; letter-spacing:-.01em; } h1 span { color:var(--acc); }
+  .sub { color:var(--mut); font-size:12.5px; margin-bottom:16px; }
+  aside label { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); display:block; margin:14px 0 6px; }
+  .row { display:flex; gap:6px; }
+  input[type=text] { flex:1; min-width:0; padding:7px 9px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  button { padding:7px 12px; border:1px solid var(--ink); background:var(--ink); color:#fff; border-radius:6px; cursor:pointer; font:inherit; }
+  button.ghost { background:#fff; color:var(--ink); border-color:var(--line); }
+  #trips { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .trip { text-align:left; background:#fff; color:var(--ink); border:1px solid var(--line); padding:8px 10px; }
+  .trip small { display:block; color:var(--mut); font-size:11.5px; }
+  .trip.sel { border-color:var(--acc); box-shadow:inset 3px 0 0 var(--acc); }
+  #status { margin-top:12px; font-size:12.5px; color:var(--mut); min-height:18px; }
+  #status.err { color:#b91c1c; }
+  .kpis { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+  .kpi { border:1px solid var(--line); border-radius:8px; padding:8px 10px; background:#fff; }
+  .kpi b { display:block; font-size:20px; font-variant-numeric:tabular-nums; }
+  .kpi span { font-size:11.5px; color:var(--mut); }
+  .kpi.main { grid-column:span 2; border-color:var(--acc); } .kpi.main b { font-size:28px; color:var(--acc); }
+  table { width:100%; border-collapse:collapse; margin-top:8px; font-size:12.5px; font-variant-numeric:tabular-nums; }
+  td { padding:3px 0; border-bottom:1px solid #eef0f2; } td:last-child { text-align:right; }
+  #map { height:100vh; }
+  .legend { background:#fff; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; line-height:1.7; }
+  .sw { display:inline-block; width:18px; height:4px; vertical-align:middle; margin-right:6px; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin:0 11px 0 5px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<aside>
+  <h1>Path<span>Snap</span></h1>
+  <div class="sub">Map-matching evaluator console · predictions come from the API on Laptop 1</div>
+
+  <label>API address (Laptop 1)</label>
+  <div class="row"><input id="api" type="text" placeholder="http://192.168.x.x:8000"><button class="ghost" id="connect">Connect</button></div>
+
+  <label>Evaluation trips</label>
+  <div id="trips"><div class="sub">Connect to load trips…</div></div>
+
+  <label>Decoder</label>
+  <div class="row" style="font-size:13px;align-items:center"><input type="checkbox" id="hmm" checked><span style="margin-left:4px">Use HMM / Viterbi route reconstruction</span></div>
+
+  <div style="margin-top:14px"><button id="run" disabled>Run prediction</button></div>
+  <div id="status"></div>
+
+  <div id="results" style="display:none">
+    <label>Results</label>
+    <div class="kpis">
+      <div class="kpi main"><b id="k-acc">–</b><span>Top-1 accuracy (scored observations)</span></div>
+      <div class="kpi"><b id="k-f1">–</b><span>Route F1 (length-weighted)</span></div>
+      <div class="kpi"><b id="k-cont">–</b><span>Route continuity</span></div>
+    </div>
+    <table id="tbl"></table>
+  </div>
+</aside>
+<div id="map"></div>
+<script>
+const $ = s => document.querySelector(s);
+const map = L.map('map').setView([20, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap'}).addTo(map);
+const gpsLayer = L.layerGroup().addTo(map), routeLayer = L.layerGroup().addTo(map);
+L.control.layers(null, {'Raw GPS': gpsLayer, 'Predicted route': routeLayer}, {collapsed: false}).addTo(map);
+const legend = L.control({position: 'bottomleft'});
+legend.onAdd = () => { const d = L.DomUtil.create('div', 'legend');
+  d.innerHTML = '<span class="dot" style="background:#1d4ed8"></span>Raw GPS<br><span class="sw" style="background:#c2410c"></span>Predicted route'; return d; };
+legend.addTo(map);
+
+let selected = null;
+let apiBase = '';
+try { apiBase = localStorage.getItem('pathsnap_api') || ''; } catch (e) {}
+$('#api').value = apiBase || 'http://localhost:8000';
+const status = (msg, err) => { $('#status').textContent = msg; $('#status').className = err ? 'err' : ''; };
+const pct = x => x == null ? 'n/a' : (100 * x).toFixed(2) + '%';
+
+async function connect() {
+  apiBase = $('#api').value.replace(/\/$/, '');
+  try { localStorage.setItem('pathsnap_api', apiBase); } catch (e) {}
+  status('Connecting…');
+  try {
+    const r = await fetch(apiBase + '/trips'); if (!r.ok) throw new Error('HTTP ' + r.status);
+    const {trips} = await r.json();
+    $('#trips').innerHTML = '';
+    trips.forEach(t => {
+      const b = document.createElement('button'); b.className = 'trip';
+      b.innerHTML = `${t.trip_id}<small>${t.n_obs.toLocaleString()} GPS points</small>`;
+      b.onclick = () => { document.querySelectorAll('.trip').forEach(x => x.classList.remove('sel')); b.classList.add('sel');
+                          selected = t.trip_id; $('#run').disabled = false; };
+      $('#trips').appendChild(b);
+    });
+    status(`Connected · ${trips.length} trips available`);
+  } catch (e) { status('Could not reach API: ' + e.message, true); }
+}
+
+async function run() {
+  if (!selected) return;
+  $('#run').disabled = true; status(`Sending trip ${selected} to API…`);
+  try {
+    const r = await fetch(apiBase + '/predict', {method: 'POST', headers: {'Content-Type': 'application/json'},
+                                                 body: JSON.stringify({trip_id: selected, use_hmm: $('#hmm').checked})});
+    if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + await r.text());
+    const d = await r.json();
+    gpsLayer.clearLayers(); routeLayer.clearLayers();
+    d.gps.forEach(p => L.circleMarker(p, {radius: 2.5, color: '#1d4ed8', weight: 1, fillOpacity: .8}).addTo(gpsLayer));
+    d.route.forEach(seg => L.polyline(seg, {color: '#c2410c', weight: 5, opacity: .85}).addTo(routeLayer));
+    map.fitBounds(L.latLngBounds(d.gps), {padding: [30, 30]});
+    const m = d.metrics || {};
+    $('#results').style.display = '';
+    $('#k-acc').textContent = pct(m.top1_accuracy);
+    $('#k-f1').textContent = pct(m.route_f1);
+    $('#k-cont').textContent = pct(m.continuity_traversable);
+    const rows = [['Trip', d.trip_id], ['GPS observations', d.n_obs], ['Scored observations', m.n_scored_obs ?? 'n/a'],
+      ['Classifier-only top-1', pct(m.classifier_only_top1_accuracy)], ['Top-1 (all obs)', pct(m.top1_accuracy_all_obs)],
+      ['Route precision', pct(m.route_precision)], ['Route recall', pct(m.route_recall)],
+      ['Continuity (adjacent arcs)', pct(m.continuity_adjacent)], ['Predicted route arcs', d.n_route_arcs],
+      ['HMM chain breaks', d.hmm_breaks], ['Classify time', d.timing_s.classify + ' s'],
+      ['Decode time', d.timing_s.decode + ' s'], ['Total API time', d.timing_s.total + ' s']];
+    $('#tbl').innerHTML = rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+    status(`Done · trip ${d.trip_id}`);
+  } catch (e) { status('Prediction failed: ' + e.message, true); }
+  $('#run').disabled = false;
+}
+$('#connect').onclick = connect; $('#run').onclick = run;
+connect();
+</script>
+</body>
+</html>

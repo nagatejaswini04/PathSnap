@@ -1,0 +1,53 @@
+train rows 374127 obs 61739 | test rows 119585
+== LogisticRegression
+  fold 0: F1=0.9206 top1=0.8630 ll=0.1398 (1s)
+  fold 1: F1=0.9174 top1=0.8635 ll=0.1485 (1s)
+  fold 2: F1=0.9318 top1=0.8814 ll=0.1134 (1s)
+  fold 3: F1=0.9316 top1=0.8770 ll=0.1117 (1s)
+  fold 4: F1=0.9144 top1=0.8541 ll=0.1358 (1s)
+  TEST {'cv_macro_f1': np.float64(0.9232), 'cv_macro_f1_std': np.float64(0.0081), 'cv_top1': np.float64(0.8678), 'cv_log_loss': np.float64(0.1298), 'train_macro_f1': 0.9235, 'train_top1': 0.8683, 'train_log_loss': 0.1287, 'test_top1': 0.8657, 'test_macro_f1': 0.9208, 'test_precision': 0.8657, 'test_recall': 0.8681, 'test_log_loss': 0.1237, 'test_route_continuity': 0.9422, 'fit_seconds': 1.248, 'infer_ms_per_obs': 0.0007}
+== GaussianNB
+  fold 0: F1=0.8681 top1=0.7759 ll=1.2667 (1s)
+  fold 1: F1=0.8260 top1=0.7158 ll=1.5715 (1s)
+  fold 2: F1=0.9008 top1=0.8291 ll=0.8037 (1s)
+  fold 3: F1=0.8939 top1=0.8139 ll=1.0343 (1s)
+  fold 4: F1=0.8693 top1=0.7783 ll=1.2462 (1s)
+  TEST {'cv_macro_f1': np.float64(0.8716), 'cv_macro_f1_std': np.float64(0.0294), 'cv_top1': np.float64(0.7826), 'cv_log_loss': np.float64(1.1845), 'train_macro_f1': 0.8706, 'train_top1': 0.7802, 'train_log_loss': 1.1833, 'test_top1': 0.7907, 'test_macro_f1': 0.8761, 'test_precision': 0.7907, 'test_recall': 0.7929, 'test_log_loss': 1.129, 'test_route_continuity': 0.8811, 'fit_seconds': 1.2684, 'infer_ms_per_obs': 0.0154}
+== KNN
+  fold 0: F1=0.9206 top1=0.8630 ll=0.1516 (0s)
+  fold 1: F1=0.9203 top1=0.8682 ll=0.1821 (0s)
+  fold 2: F1=0.9339 top1=0.8849 ll=0.1155 (0s)
+  fold 3: F1=0.9278 top1=0.8706 ll=0.1284 (0s)
+  fold 4: F1=0.9146 top1=0.8545 ll=0.1525 (0s)
+  TEST {'cv_macro_f1': np.float64(0.9234), 'cv_macro_f1_std': np.float64(0.0075), 'cv_top1': np.float64(0.8682), 'cv_log_loss': np.float64(0.146), 'train_macro_f1': 0.9974, 'train_top1': 0.9912, 'train_log_loss': 0.0, 'test_top1': 0.8683, 'test_macro_f1': 0.9224, 'test_precision': 0.8683, 'test_recall': 0.8708, 'test_log_loss': 0.1331, 'test_route_continuity': 0.9427, 'fit_seconds': 0.1337, 'infer_ms_per_obs': 4.1406}
+== RandomForest
+  fold 0: F1=0.9274 top1=0.8742 ll=0.1051 (83s)
+  fold 1: F1=0.9273 top1=0.8796 ll=0.1154 (85s)
+  fold 2: F1=0.9450 top1=0.9036 ll=0.0787 (84s)
+  fold 3: F1=0.9355 top1=0.8835 ll=0.0835 (82s)
+  fold 4: F1=0.9213 top1=0.8657 ll=0.1056 (83s)
+  TEST {'cv_macro_f1': np.float64(0.9313), 'cv_macro_f1_std': np.float64(0.0092), 'cv_top1': np.float64(0.8813), 'cv_log_loss': np.float64(0.0976), 'train_macro_f1': 0.9674, 'train_top1': 0.9413, 'train_log_loss': 0.0537, 'test_top1': 0.8851, 'test_macro_f1': 0.9324, 'test_precision': 0.8851, 'test_recall': 0.8876, 'test_log_loss': 0.0908, 'test_route_continuity': 0.9517, 'fit_seconds': 110.1786, 'infer_ms_per_obs': 0.0591}
+== HistGradientBoosting
+  fold 0: F1=0.9241 top1=0.8688 ll=0.1132 (3s)
+  fold 1: F1=0.9261 top1=0.8775 ll=0.1199 (3s)
+  fold 2: F1=0.9450 top1=0.9036 ll=0.0833 (4s)
+  fold 3: F1=0.9359 top1=0.8842 ll=0.0838 (2s)
+  fold 4: F1=0.9187 top1=0.8613 ll=0.1111 (3s)
+  TEST {'cv_macro_f1': np.float64(0.9299), 'cv_macro_f1_std': np.float64(0.0105), 'cv_top1': np.float64(0.8791), 'cv_log_loss': np.float64(0.1023), 'train_macro_f1': 0.9405, 'train_top1': 0.8966, 'train_log_loss': 0.086, 'test_top1': 0.8845, 'test_macro_f1': 0.932, 'test_precision': 0.8845, 'test_recall': 0.887, 'test_log_loss': 0.0922, 'test_route_continuity': 0.9457, 'fit_seconds': 2.6274, 'infer_ms_per_obs': 0.0113}
+== LightGBM
+  fold 0: F1=0.9286 top1=0.8762 ll=0.1041 (6s)
+  fold 1: F1=0.9265 top1=0.8782 ll=0.1169 (6s)
+  fold 2: F1=0.9476 top1=0.9080 ll=0.0761 (6s)
+  fold 3: F1=0.9364 top1=0.8850 ll=0.0829 (6s)
+  fold 4: F1=0.9210 top1=0.8653 ll=0.1044 (6s)
+  TEST {'cv_macro_f1': np.float64(0.932), 'cv_macro_f1_std': np.float64(0.0103), 'cv_top1': np.float64(0.8825), 'cv_log_loss': np.float64(0.0969), 'train_macro_f1': 0.9519, 'train_top1': 0.9156, 'train_log_loss': 0.069, 'test_top1': 0.8918, 'test_macro_f1': 0.9363, 'test_precision': 0.8918, 'test_recall': 0.8943, 'test_log_loss': 0.0875, 'test_route_continuity': 0.9525, 'fit_seconds': 7.0493, 'infer_ms_per_obs': 0.0577}
+== MLP
+  fold 0: F1=0.9268 top1=0.8733 ll=0.1092 (11s)
+  fold 1: F1=0.9269 top1=0.8788 ll=0.1244 (14s)
+  fold 2: F1=0.9453 top1=0.9040 ll=0.0812 (15s)
+  fold 3: F1=0.9335 top1=0.8802 ll=0.0935 (15s)
+  fold 4: F1=0.9172 top1=0.8589 ll=0.1117 (15s)
+  TEST {'cv_macro_f1': np.float64(0.9299), 'cv_macro_f1_std': np.float64(0.0103), 'cv_top1': np.float64(0.879), 'cv_log_loss': np.float64(0.104), 'train_macro_f1': 0.9384, 'train_top1': 0.8931, 'train_log_loss': 0.0877, 'test_top1': 0.8777, 'test_macro_f1': 0.928, 'test_precision': 0.8777, 'test_recall': 0.8802, 'test_log_loss': 0.0937, 'test_route_continuity': 0.9537, 'fit_seconds': 16.3313, 'infer_ms_per_obs': 0.004}
+/usr/local/lib/python3.13/site-packages/lightgbm/sklearn.py:1106: LGBMDeprecationWarning: The argument 'eval_set' is deprecated, use 'eval_X' and 'eval_y' instead.
+  eval_set = _validate_eval_set_Xy(eval_set=eval_set, eval_X=eval_X, eval_y=eval_y)
+done

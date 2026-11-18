@@ -1,0 +1,8 @@
+{
+  "emission": "clf",
+  "params": {
+    "beta": 5.0,
+    "w_emit": 1.0
+  },
+  "selected_on": "train OOF top-1 (80 trips)"
+}

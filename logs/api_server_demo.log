@@ -1,0 +1,63 @@
+2026-11-18 12:19:45,226 | INFO | Model loaded from models/final | HMM config {'emission': 'clf', 'params': {'beta': 5.0, 'w_emit': 1.0}, 'selected_on': 'train OOF top-1 (80 trips)'} | eval dir data/raw/student_test
+INFO:     Started server process [2142]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-11-18 12:19:50,688 | INFO | GET /health from 127.0.0.1 -> 200 (2 ms)
+INFO:     127.0.0.1:52114 - "GET /health HTTP/1.1" 200 OK
+2026-11-18 12:19:57,082 | INFO | GET /trips from 127.0.0.1 -> 200 (3 ms)
+INFO:     127.0.0.1:52130 - "GET /trips HTTP/1.1" 200 OK
+2026-11-18 12:20:01,252 | INFO | PREDICT request trip=00000007 use_hmm=True
+2026-11-18 12:20:01,745 | INFO | RESULT trip=00000007 obs=1354 scored=1354 top1=0.9734 (classifier-only 0.9549) route_F1=0.9911 continuity=1.0000 breaks=0 time=0.49s
+2026-11-18 12:20:01,756 | INFO | POST /predict from 127.0.0.1 -> 200 (507 ms)
+INFO:     127.0.0.1:52130 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:04,503 | INFO | PREDICT request trip=00000000 use_hmm=True
+2026-11-18 12:20:05,406 | INFO | RESULT trip=00000000 obs=2503 scored=2503 top1=0.9632 (classifier-only 0.9525) route_F1=0.9947 continuity=0.9992 breaks=2 time=0.90s
+2026-11-18 12:20:05,427 | INFO | POST /predict from 127.0.0.1 -> 200 (925 ms)
+INFO:     127.0.0.1:37926 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:05,439 | INFO | PREDICT request trip=00000007 use_hmm=True
+2026-11-18 12:20:05,893 | INFO | RESULT trip=00000007 obs=1354 scored=1354 top1=0.9734 (classifier-only 0.9549) route_F1=0.9911 continuity=1.0000 breaks=0 time=0.46s
+2026-11-18 12:20:05,900 | INFO | POST /predict from 127.0.0.1 -> 200 (463 ms)
+INFO:     127.0.0.1:37940 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:05,912 | INFO | PREDICT request trip=00000009 use_hmm=True
+2026-11-18 12:20:07,000 | INFO | RESULT trip=00000009 obs=1049 scored=1049 top1=0.8856 (classifier-only 0.8561) route_F1=0.9560 continuity=1.0000 breaks=0 time=1.09s
+2026-11-18 12:20:07,020 | INFO | POST /predict from 127.0.0.1 -> 200 (1109 ms)
+INFO:     127.0.0.1:37944 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:07,030 | INFO | PREDICT request trip=00000040 use_hmm=True
+2026-11-18 12:20:08,262 | INFO | RESULT trip=00000040 obs=2995 scored=2995 top1=0.9753 (classifier-only 0.9556) route_F1=0.9894 continuity=1.0000 breaks=0 time=1.23s
+2026-11-18 12:20:08,289 | INFO | POST /predict from 127.0.0.1 -> 200 (1260 ms)
+INFO:     127.0.0.1:37960 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:08,299 | INFO | PREDICT request trip=00000052 use_hmm=True
+2026-11-18 12:20:08,446 | INFO | RESULT trip=00000052 obs=262 scored=262 top1=0.9809 (classifier-only 0.9618) route_F1=0.9984 continuity=1.0000 breaks=0 time=0.15s
+2026-11-18 12:20:08,450 | INFO | POST /predict from 127.0.0.1 -> 200 (152 ms)
+INFO:     127.0.0.1:37970 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:08,466 | INFO | PREDICT request trip=00000056 use_hmm=True
+2026-11-18 12:20:11,878 | INFO | RESULT trip=00000056 obs=3958 scored=3931 top1=0.9489 (classifier-only 0.9026) route_F1=0.9755 continuity=0.9995 breaks=2 time=3.41s
+2026-11-18 12:20:12,055 | INFO | POST /predict from 127.0.0.1 -> 200 (3590 ms)
+INFO:     127.0.0.1:37974 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:12,066 | INFO | PREDICT request trip=00000065 use_hmm=True
+2026-11-18 12:20:12,591 | INFO | RESULT trip=00000065 obs=768 scored=768 top1=0.8659 (classifier-only 0.8568) route_F1=0.9723 continuity=0.9974 breaks=3 time=0.53s
+2026-11-18 12:20:12,606 | INFO | POST /predict from 127.0.0.1 -> 200 (542 ms)
+INFO:     127.0.0.1:59758 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:12,616 | INFO | PREDICT request trip=00000076 use_hmm=True
+2026-11-18 12:20:15,467 | INFO | RESULT trip=00000076 obs=1486 scored=1486 top1=0.9482 (classifier-only 0.9145) route_F1=0.9747 continuity=1.0000 breaks=0 time=2.85s
+2026-11-18 12:20:15,555 | INFO | POST /predict from 127.0.0.1 -> 200 (2940 ms)
+INFO:     127.0.0.1:59760 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:15,564 | INFO | PREDICT request trip=00000077 use_hmm=True
+2026-11-18 12:20:17,308 | INFO | RESULT trip=00000077 obs=3911 scored=3911 top1=0.8512 (classifier-only 0.7791) route_F1=0.9512 continuity=1.0000 breaks=0 time=1.74s
+2026-11-18 12:20:17,330 | INFO | POST /predict from 127.0.0.1 -> 200 (1767 ms)
+INFO:     127.0.0.1:59776 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:17,340 | INFO | PREDICT request trip=00000091 use_hmm=True
+2026-11-18 12:20:17,855 | INFO | RESULT trip=00000091 obs=874 scored=874 top1=0.9108 (classifier-only 0.8879) route_F1=0.9793 continuity=1.0000 breaks=0 time=0.52s
+2026-11-18 12:20:17,875 | INFO | POST /predict from 127.0.0.1 -> 200 (536 ms)
+INFO:     127.0.0.1:59786 - "POST /predict HTTP/1.1" 200 OK
+2026-11-18 12:20:32,937 | INFO | GET /trips from 127.0.0.1 -> 200 (12 ms)
+INFO:     127.0.0.1:54552 - "GET /trips HTTP/1.1" 200 OK
+2026-11-18 12:20:37,046 | INFO | PREDICT request trip=00000077 use_hmm=True
+2026-11-18 12:20:38,509 | INFO | RESULT trip=00000077 obs=3911 scored=3911 top1=0.8512 (classifier-only 0.7791) route_F1=0.9512 continuity=1.0000 breaks=0 time=1.46s
+2026-11-18 12:20:38,538 | INFO | POST /predict from 127.0.0.1 -> 200 (1494 ms)
+INFO:     127.0.0.1:54552 - "POST /predict HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2142]
